@@ -1,0 +1,181 @@
+<coding_guidelines>
+# Project Intelligence
+
+This file is the learning memory for AI agents working on this project. It captures patterns, decisions, and tribal knowledge that help future iterations work faster and smarter.
+
+## Quick Reference
+
+### Critical Commands
+```bash
+# Build
+[YOUR_BUILD_COMMAND]
+
+# Test
+[YOUR_TEST_COMMAND]
+
+# Lint
+[YOUR_LINT_COMMAND]
+
+# Type check
+[YOUR_TYPECHECK_COMMAND]
+```
+
+### Project Structure
+```
+[DESCRIBE KEY DIRECTORIES AND THEIR PURPOSE]
+```
+
+---
+
+## Code Patterns
+
+### Naming Conventions
+<!-- How are things named in this project? -->
+- Components: `PascalCase` (e.g., `PlayerHealth.ts`)
+- Functions: `camelCase` (e.g., `calculateDamage()`)
+- Constants: `SCREAMING_SNAKE_CASE` (e.g., `MAX_HEALTH`)
+- Files: [describe pattern]
+
+### Import Patterns
+<!-- How are imports organized? -->
+```typescript
+// Example import order/style used in this project
+```
+
+### Error Handling
+<!-- How does this project handle errors? -->
+```typescript
+// Example error handling pattern
+```
+
+### State Management
+<!-- How is state managed? -->
+- Pattern: [Redux/Context/Zustand/etc.]
+- Location: [where state lives]
+
+### API Patterns
+<!-- How are API calls structured? -->
+```typescript
+// Example API call pattern
+```
+
+---
+
+## Architecture Decisions
+
+### Why [DECISION]?
+<!-- Document important architectural choices -->
+- Decision: [what was decided]
+- Reason: [why it was decided]
+- Alternatives considered: [what else was considered]
+
+---
+
+## Known Gotchas
+
+<!-- Things that will trip you up if you don't know -->
+
+### [GOTCHA NAME]
+- **Problem**: [what goes wrong]
+- **Solution**: [how to avoid/fix it]
+- **Files affected**: [relevant files]
+
+---
+
+## Dependencies
+
+### Critical Dependencies
+| Package | Purpose | Notes |
+|---------|---------|-------|
+| [name] | [why it's used] | [any quirks] |
+
+### Internal Dependencies
+<!-- Which modules depend on which? -->
+- `[Module A]` depends on `[Module B]`
+
+---
+
+## Testing Patterns
+
+### Test File Location
+- Unit tests: `[path]`
+- Integration tests: `[path]`
+- E2E tests: `[path]`
+
+### Test Naming Convention
+```typescript
+// Example test pattern
+describe('[Component/Function]', () => {
+  it('should [expected behavior]', () => {
+    // test
+  });
+});
+```
+
+### Mocking Patterns
+```typescript
+// How to mock [common thing] in this project
+```
+
+---
+
+## Performance Considerations
+
+### Known Bottlenecks
+- [area]: [why it's slow, how to work around]
+
+### Optimization Patterns
+- [pattern]: [when to use it]
+
+---
+
+## Environment & Configuration
+
+### Required Environment Variables
+```bash
+# Required
+REQUIRED_VAR=value
+
+# Optional
+OPTIONAL_VAR=default_value
+```
+
+### Configuration Files
+| File | Purpose |
+|------|---------|
+| [file] | [what it configures] |
+
+---
+
+## Recent Learnings
+
+<!-- Auto-populated section - most recent discoveries go here -->
+<!-- Format: [DATE] - [LEARNING] -->
+
+### [DATE]
+- **Context**: [what was being worked on]
+- **Discovery**: [what was learned]
+- **Impact**: [how it affects future work]
+
+---
+
+## Directory-Specific Notes
+
+### `/src/components/`
+<!-- Patterns specific to this directory -->
+
+### `/src/services/`
+<!-- Patterns specific to this directory -->
+
+### `/src/utils/`
+<!-- Patterns specific to this directory -->
+
+---
+
+## DO NOT
+
+<!-- Things to absolutely avoid -->
+- [ ] Never [thing to avoid]
+- [ ] Always [thing to always do instead]
+
+</coding_guidelines>

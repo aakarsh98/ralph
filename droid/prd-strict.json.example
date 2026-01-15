@@ -1,0 +1,81 @@
+{
+  "project": "2D Platformer Game",
+  "branchName": "feature/player-health",
+  "description": "Player Health System - Add health mechanics to player character",
+  "qualityChecks": {
+    "build": "npm run build",
+    "typecheck": "npx tsc --noEmit",
+    "test": "npm test"
+  },
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Add health property to Player entity",
+      "description": "As a developer, I need the Player class to have a health property for damage calculations.",
+      "acceptanceCriteria": [
+        "Player class has health property with type number",
+        "VERIFY_FILE_EXISTS: src/entities/Player.ts",
+        "VERIFY: grep -q 'health:' src/entities/Player.ts",
+        "VERIFY: grep -q 'number' src/entities/Player.ts",
+        "Health defaults to 100",
+        "VERIFY: grep -q 'health.*=.*100' src/entities/Player.ts",
+        "VERIFY_BUILD: npm run build",
+        "VERIFY_TEST: npm test -- --grep 'Player.*health'"
+      ],
+      "priority": 1,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-002",
+      "title": "Implement damage method",
+      "description": "As a developer, I need a method to reduce player health when taking damage.",
+      "acceptanceCriteria": [
+        "Player has takeDamage(amount: number) method",
+        "VERIFY: grep -q 'takeDamage' src/entities/Player.ts",
+        "Method reduces health by damage amount",
+        "VERIFY_TEST: npm test -- --grep 'takeDamage reduces health'",
+        "Health cannot go below 0",
+        "VERIFY_TEST: npm test -- --grep 'health.*minimum.*0'",
+        "VERIFY_BUILD: npm run build"
+      ],
+      "priority": 2,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-003",
+      "title": "Add health bar UI component",
+      "description": "As a player, I want to see my health displayed on screen.",
+      "acceptanceCriteria": [
+        "HealthBar component exists",
+        "VERIFY_FILE_EXISTS: src/ui/HealthBar.ts",
+        "Health bar renders as red rectangle",
+        "VERIFY: grep -q 'fillStyle.*red\\|#[fF][fF]0000\\|rgb(255' src/ui/HealthBar.ts",
+        "Width scales with health percentage",
+        "VERIFY: grep -q 'width.*health\\|health.*width' src/ui/HealthBar.ts",
+        "VERIFY_BUILD: npm run build",
+        "VERIFY_OUTPUT: npm run test:visual 2>&1 | grep -q 'HealthBar.*PASS'"
+      ],
+      "priority": 3,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-004",
+      "title": "Trigger game over on zero health",
+      "description": "As a player, I want the game to end when my health reaches zero.",
+      "acceptanceCriteria": [
+        "Player death triggers game over state",
+        "VERIFY: grep -q 'gameOver\\|GameOver\\|game.*over' src/entities/Player.ts",
+        "Game over screen displays",
+        "VERIFY_FILE_EXISTS: src/ui/GameOverScreen.ts",
+        "VERIFY_TEST: npm test -- --grep 'game over.*zero health'",
+        "VERIFY_BUILD: npm run build"
+      ],
+      "priority": 4,
+      "passes": false,
+      "notes": ""
+    }
+  ]
+}

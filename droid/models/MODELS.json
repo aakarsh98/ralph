@@ -1,0 +1,239 @@
+{
+  "version": "1.0.0",
+  "lastUpdated": "2026-01-15",
+  "description": "Model registry for intelligent model selection in Droid Ralph",
+  "source": "https://docs.factory.ai/pricing",
+  
+  "models": {
+    "glm-4.7": {
+      "name": "Droid Core",
+      "provider": "Open Source",
+      "multiplier": 0.25,
+      "reasoning": ["none"],
+      "defaultReasoning": "none",
+      "speed": "fast",
+      "quality": "basic",
+      "costTier": 1,
+      "strengths": ["bulk automation", "simple tasks", "cost-sensitive"],
+      "weaknesses": ["no images", "limited reasoning", "basic code quality"],
+      "bestFor": ["boilerplate", "simple edits", "file operations", "config changes"]
+    },
+    "gemini-3-flash-preview": {
+      "name": "Gemini 3 Flash",
+      "provider": "Google",
+      "multiplier": 0.2,
+      "reasoning": ["minimal", "low", "medium", "high"],
+      "defaultReasoning": "high",
+      "speed": "very-fast",
+      "quality": "good",
+      "costTier": 1,
+      "strengths": ["fast", "cheap", "reasoning support"],
+      "weaknesses": ["less reliable on complex code"],
+      "bestFor": ["high-volume tasks", "quick iterations", "summarization"]
+    },
+    "claude-haiku-4-5-20251001": {
+      "name": "Claude Haiku 4.5",
+      "provider": "Anthropic",
+      "multiplier": 0.4,
+      "reasoning": ["off", "low", "medium", "high"],
+      "defaultReasoning": "off",
+      "speed": "fast",
+      "quality": "good",
+      "costTier": 2,
+      "strengths": ["fast", "cost-efficient", "good instruction following"],
+      "weaknesses": ["less depth than Sonnet/Opus"],
+      "bestFor": ["routine tasks", "simple implementations", "CI/CD automation"]
+    },
+    "gpt-5.1": {
+      "name": "GPT-5.1",
+      "provider": "OpenAI",
+      "multiplier": 0.5,
+      "reasoning": ["none", "low", "medium", "high"],
+      "defaultReasoning": "none",
+      "speed": "medium",
+      "quality": "good",
+      "costTier": 2,
+      "strengths": ["good generalist", "flexible reasoning", "structured outputs"],
+      "weaknesses": ["may stop early without persistence prompting"],
+      "bestFor": ["general tasks", "mixed workloads", "API integrations"]
+    },
+    "gpt-5.1-codex": {
+      "name": "GPT-5.1 Codex",
+      "provider": "OpenAI",
+      "multiplier": 0.5,
+      "reasoning": ["low", "medium", "high"],
+      "defaultReasoning": "medium",
+      "speed": "medium",
+      "quality": "very-good",
+      "costTier": 2,
+      "strengths": ["optimized for code", "apply_patch tool", "quick iteration"],
+      "weaknesses": ["may be verbose"],
+      "bestFor": ["code implementation", "bug fixes", "refactoring"]
+    },
+    "gpt-5.1-codex-max": {
+      "name": "GPT-5.1 Codex Max",
+      "provider": "OpenAI",
+      "multiplier": 0.5,
+      "reasoning": ["low", "medium", "high", "extra-high"],
+      "defaultReasoning": "medium",
+      "speed": "medium",
+      "quality": "excellent",
+      "costTier": 2,
+      "strengths": ["extra high reasoning", "complex debugging", "heavy implementation"],
+      "weaknesses": ["higher latency at extra-high"],
+      "bestFor": ["complex features", "debugging", "architecture work"]
+    },
+    "gpt-5.2": {
+      "name": "GPT-5.2",
+      "provider": "OpenAI",
+      "multiplier": 0.7,
+      "reasoning": ["low", "medium", "high"],
+      "defaultReasoning": "low",
+      "speed": "medium",
+      "quality": "excellent",
+      "costTier": 3,
+      "strengths": ["newest OpenAI model", "improved reasoning"],
+      "weaknesses": ["higher cost"],
+      "bestFor": ["complex reasoning", "nuanced tasks"]
+    },
+    "gpt-5.2-codex": {
+      "name": "GPT-5.2 Codex",
+      "provider": "OpenAI",
+      "multiplier": 0.7,
+      "reasoning": ["low", "medium", "high"],
+      "defaultReasoning": "medium",
+      "speed": "medium",
+      "quality": "excellent",
+      "costTier": 3,
+      "strengths": ["newest codex model", "excellent code quality", "improved reasoning"],
+      "weaknesses": ["higher cost than 5.1"],
+      "bestFor": ["complex code", "advanced refactoring", "architecture work"]
+    },
+    "gemini-3-pro-preview": {
+      "name": "Gemini 3 Pro",
+      "provider": "Google",
+      "multiplier": 0.8,
+      "reasoning": ["low", "high"],
+      "defaultReasoning": "high",
+      "speed": "medium",
+      "quality": "very-good",
+      "costTier": 3,
+      "strengths": ["mixed reasoning", "structured outputs", "research flows"],
+      "weaknesses": ["limited reasoning options"],
+      "bestFor": ["research", "analysis", "structured data"]
+    },
+    "claude-sonnet-4-5-20250929": {
+      "name": "Claude Sonnet 4.5",
+      "provider": "Anthropic",
+      "multiplier": 1.2,
+      "reasoning": ["off", "low", "medium", "high"],
+      "defaultReasoning": "off",
+      "speed": "medium",
+      "quality": "excellent",
+      "costTier": 4,
+      "strengths": ["balanced cost/quality", "strong coding", "good reasoning"],
+      "weaknesses": ["more expensive than GPT-5.1"],
+      "bestFor": ["daily driver", "feature development", "code review"]
+    },
+    "claude-opus-4-5-20251101": {
+      "name": "Claude Opus 4.5",
+      "provider": "Anthropic",
+      "multiplier": 2.0,
+      "reasoning": ["off", "low", "medium", "high"],
+      "defaultReasoning": "off",
+      "speed": "slow",
+      "quality": "premium",
+      "costTier": 5,
+      "strengths": ["highest quality", "complex architecture", "nuanced understanding"],
+      "weaknesses": ["expensive", "slower"],
+      "bestFor": ["critical decisions", "complex architecture", "ambiguous specs"]
+    }
+  },
+  
+  "taskComplexity": {
+    "trivial": {
+      "description": "Simple file edits, config changes, boilerplate",
+      "examples": ["rename variable", "update config value", "add import", "fix typo"],
+      "recommendedModels": ["gemini-3-flash-preview", "glm-4.7", "claude-haiku-4-5-20251001"],
+      "reasoning": "none",
+      "research": "80% of tasks can use smaller models with 90% cost reduction (LinkedIn/Manthan Patel)"
+    },
+    "simple": {
+      "description": "Single-file changes, straightforward logic",
+      "examples": ["add method", "fix simple bug", "add validation", "write simple test"],
+      "recommendedModels": ["gpt-5.1-codex", "claude-haiku-4-5-20251001", "gemini-3-flash-preview"],
+      "reasoning": "low",
+      "research": "GPT-5.1-Codex excels at fast code generation (GitHub Copilot docs)"
+    },
+    "moderate": {
+      "description": "Multi-file changes, requires understanding context",
+      "examples": ["add feature", "refactor module", "add comprehensive tests", "new endpoint"],
+      "recommendedModels": ["gpt-5.1-codex", "claude-sonnet-4-5-20250929", "gpt-5.2-codex"],
+      "reasoning": "medium",
+      "research": "Sonnet 4.5 leads SWE-bench at 82% (vellum.ai)"
+    },
+    "complex": {
+      "description": "Architecture changes, complex debugging, multi-system bugs",
+      "examples": ["debug race condition", "API redesign", "complex refactor", "multi-system bug"],
+      "recommendedModels": ["claude-opus-4-5-20251101", "claude-sonnet-4-5-20250929", "gpt-5.1-codex-max"],
+      "reasoning": "high",
+      "research": "Claude Opus 4.5 first to break 80% SWE-bench, best at debugging context (Anthropic)"
+    },
+    "critical": {
+      "description": "Critical architecture, security review, ambiguous requirements, novel problems",
+      "examples": ["security architecture", "performance optimization", "system design", "ambiguous specs"],
+      "recommendedModels": ["claude-opus-4-5-20251101", "gpt-5.2", "gpt-5.1-codex-max"],
+      "reasoning": "high",
+      "research": "GPT-5.2 leads abstract reasoning at 52.9% ARC-AGI-2 (rdworldonline.com)"
+    }
+  },
+  
+  "taskTypeRecommendations": {
+    "debugging": {
+      "simple": "gpt-5.1-codex",
+      "complex": "claude-opus-4-5-20251101",
+      "research": "Claude excels at debugging due to superior contextual understanding (Anthropic, Surge AI)"
+    },
+    "newCode": {
+      "simple": "gpt-5.1-codex",
+      "complex": "claude-sonnet-4-5-20250929",
+      "research": "GPT models more creative/flexible in solutions (GitHub docs)"
+    },
+    "refactoring": {
+      "recommended": "claude-sonnet-4-5-20250929",
+      "research": "Claude produces cleaner, more idiomatic code in TS/Python/JS (SonarSource)"
+    },
+    "architecture": {
+      "recommended": "claude-opus-4-5-20251101",
+      "alternative": "gpt-5.2",
+      "research": "Opus handles ambiguity without guidance; GPT-5.2 best for abstract reasoning"
+    },
+    "testing": {
+      "recommended": "gpt-5.1-codex",
+      "alternative": "claude-sonnet-4-5-20250929",
+      "research": "GPT good at test patterns; Claude better edge case coverage"
+    }
+  },
+  
+  "selectionRules": {
+    "keywords": {
+      "trivial": ["rename", "config", "import", "typo", "comment", "format"],
+      "simple": ["add method", "simple", "basic", "straightforward", "minor"],
+      "moderate": ["feature", "refactor", "test", "component", "endpoint"],
+      "complex": ["debug", "architecture", "performance", "security", "migration"],
+      "critical": ["design", "critical", "complex", "ambiguous", "novel"]
+    },
+    "fileCount": {
+      "1": "trivial",
+      "2-3": "simple", 
+      "4-6": "moderate",
+      "7+": "complex"
+    },
+    "acceptanceCriteriaCount": {
+      "1-2": "trivial",
+      "3-4": "simple",
+      "5-6": "moderate",
+      "7+": "complex"
+    }
+  }
+}

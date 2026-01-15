@@ -1,17 +1,17 @@
 ---
 name: ralph
-description: "Convert PRDs to prd.json format for the Ralph autonomous agent system. Use when you have an existing PRD and need to convert it to Ralph's JSON format. Triggers on: convert this prd, turn this into ralph format, create prd.json from this, ralph json."
+description: "Convert PRDs to prd.json format for the Droid Ralph autonomous agent system. Use when you have an existing PRD and need to convert it to Ralph's JSON format."
 ---
 
-# Ralph PRD Converter
+# Droid Ralph PRD Converter
 
-Converts existing PRDs to the prd.json format that Ralph uses for autonomous execution.
+Converts existing PRDs to the prd.json format that Droid Ralph uses for autonomous execution.
 
 ---
 
 ## The Job
 
-Take a PRD (markdown file or text) and convert it to `prd.json` in your ralph directory.
+Take a PRD (markdown file or text) and convert it to `prd.json` in the ralph directory.
 
 ---
 
@@ -20,8 +20,13 @@ Take a PRD (markdown file or text) and convert it to `prd.json` in your ralph di
 ```json
 {
   "project": "[Project Name]",
-  "branchName": "ralph/[feature-name-kebab-case]",
+  "branchName": "feature/[feature-name-kebab-case]",
   "description": "[Feature description from PRD title/intro]",
+  "qualityChecks": {
+    "typecheck": "npm run typecheck",
+    "lint": "npm run lint",
+    "test": "npm run test"
+  },
   "userStories": [
     {
       "id": "US-001",
@@ -44,9 +49,9 @@ Take a PRD (markdown file or text) and convert it to `prd.json` in your ralph di
 
 ## Story Size: The Number One Rule
 
-**Each story must be completable in ONE Ralph iteration (one context window).**
+**Each story must be completable in ONE Droid Ralph iteration (one context window).**
 
-Ralph spawns a fresh Amp instance per iteration with no memory of previous work. If a story is too big, the LLM runs out of context before finishing and produces broken code.
+Droid Ralph spawns a fresh Droid instance per iteration with no memory of previous work. If a story is too big, the LLM runs out of context before finishing and produces broken code.
 
 ### Right-sized stories:
 - Add a database column and migration
@@ -65,7 +70,7 @@ Ralph spawns a fresh Amp instance per iteration with no memory of previous work.
 
 ## Story Ordering: Dependencies First
 
-Stories execute in priority order. Earlier stories must not depend on later ones.
+Stories execute in priority order (1, 2, 3...). Earlier stories must not depend on later ones.
 
 **Correct order:**
 1. Schema/database changes (migrations)
@@ -81,7 +86,7 @@ Stories execute in priority order. Earlier stories must not depend on later ones
 
 ## Acceptance Criteria: Must Be Verifiable
 
-Each criterion must be something Ralph can CHECK, not something vague.
+Each criterion must be something Droid can CHECK, not something vague.
 
 ### Good criteria (verifiable):
 - "Add `status` column to tasks table with default 'pending'"
@@ -106,12 +111,30 @@ For stories with testable logic, also include:
 "Tests pass"
 ```
 
-### For stories that change UI, also include:
+For UI stories, also include:
 ```
-"Verify in browser using dev-browser skill"
+"Verify in browser"
 ```
 
-Frontend stories are NOT complete until visually verified. Ralph will use the dev-browser skill to navigate to the page, interact with the UI, and confirm changes work.
+---
+
+## Detecting Quality Checks
+
+Before creating prd.json, check what quality commands the project uses:
+
+1. Read `package.json` for scripts like `typecheck`, `lint`, `test`
+2. Check for `tsconfig.json` (TypeScript project)
+3. Check for `.eslintrc*` or `eslint.config.*` (ESLint)
+4. Check for `pytest.ini`, `jest.config.*`, `vitest.config.*` (testing)
+
+Set `qualityChecks` accordingly:
+```json
+"qualityChecks": {
+  "typecheck": "npm run typecheck",
+  "lint": "npm run lint", 
+  "test": "npm run test"
+}
+```
 
 ---
 
@@ -121,7 +144,7 @@ Frontend stories are NOT complete until visually verified. Ralph will use the de
 2. **IDs**: Sequential (US-001, US-002, etc.)
 3. **Priority**: Based on dependency order, then document order
 4. **All stories**: `passes: false` and empty `notes`
-5. **branchName**: Derive from feature name, kebab-case, prefixed with `ralph/`
+5. **branchName**: Derive from feature name, kebab-case, prefixed with `feature/`
 6. **Always add**: "Typecheck passes" to every story's acceptance criteria
 
 ---
@@ -164,8 +187,13 @@ Add ability to mark tasks with different statuses.
 ```json
 {
   "project": "TaskApp",
-  "branchName": "ralph/task-status",
+  "branchName": "feature/task-status",
   "description": "Task Status Feature - Track task progress with status indicators",
+  "qualityChecks": {
+    "typecheck": "npm run typecheck",
+    "lint": "npm run lint",
+    "test": "npm run test"
+  },
   "userStories": [
     {
       "id": "US-001",
@@ -188,7 +216,7 @@ Add ability to mark tasks with different statuses.
         "Each task card shows colored status badge",
         "Badge colors: gray=pending, blue=in_progress, green=done",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser"
       ],
       "priority": 2,
       "passes": false,
@@ -203,7 +231,7 @@ Add ability to mark tasks with different statuses.
         "Changing status saves immediately",
         "UI updates without page refresh",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser"
       ],
       "priority": 3,
       "passes": false,
@@ -217,7 +245,7 @@ Add ability to mark tasks with different statuses.
         "Filter dropdown: All | Pending | In Progress | Done",
         "Filter persists in URL params",
         "Typecheck passes",
-        "Verify in browser using dev-browser skill"
+        "Verify in browser"
       ],
       "priority": 4,
       "passes": false,
@@ -240,7 +268,7 @@ Add ability to mark tasks with different statuses.
    - Copy current `prd.json` and `progress.txt` to archive
    - Reset `progress.txt` with fresh header
 
-**The ralph.sh script handles this automatically** when you run it, but if you are manually updating prd.json between runs, archive first.
+**The droid-ralph.sh script handles this automatically** when you run it.
 
 ---
 
@@ -248,10 +276,11 @@ Add ability to mark tasks with different statuses.
 
 Before writing prd.json, verify:
 
-- [ ] **Previous run archived** (if prd.json exists with different branchName, archive it first)
+- [ ] **Previous run archived** (if prd.json exists with different branchName)
 - [ ] Each story is completable in one iteration (small enough)
-- [ ] Stories are ordered by dependency (schema to backend to UI)
+- [ ] Stories are ordered by dependency (schema → backend → UI)
 - [ ] Every story has "Typecheck passes" as criterion
-- [ ] UI stories have "Verify in browser using dev-browser skill" as criterion
+- [ ] UI stories have "Verify in browser" as criterion
 - [ ] Acceptance criteria are verifiable (not vague)
 - [ ] No story depends on a later story
+- [ ] qualityChecks match project's actual commands

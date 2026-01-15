@@ -2,195 +2,139 @@
 
 ![Ralph](ralph.webp)
 
-Ralph is an autonomous AI agent loop that runs [Amp](https://ampcode.com) repeatedly until all PRD items are complete. Each iteration is a fresh Amp instance with clean context. Memory persists via git history, `progress.txt`, and `prd.json`.
+Ralph is an autonomous AI agent loop that implements PRD items one at a time until all tasks are complete. Each iteration spawns a fresh AI instance with clean context, with **intelligent model selection** to optimize cost and quality.
 
 Based on [Geoffrey Huntley's Ralph pattern](https://ghuntley.com/ralph/).
 
-[Read my in-depth article on how I use Ralph](https://x.com/ryancarson/status/2008548371712135632)
+## Documentation
 
-## Prerequisites
+| Document | Description |
+|----------|-------------|
+| [**PRD.md**](./PRD.md) | Full product requirements document |
+| [**QUICKSTART.md**](./QUICKSTART.md) | Step-by-step setup guide |
+| [**AGENTS.md**](./AGENTS.md) | Agent instructions |
 
-- [Amp CLI](https://ampcode.com) installed and authenticated
-- `jq` installed (`brew install jq` on macOS)
-- A git repository for your project
+## Key Features
 
-## Setup
+- **Autonomous Loop**: Runs until all PRD stories complete
+- **Intelligent Model Selection**: Chooses optimal model per task (60-80% cost savings)
+- **Pattern Learning**: Accumulates project knowledge in AGENTS.md
+- **Skills Library**: Reusable skills triggered by task keywords
+- **Verification Modes**: Normal (trust-based) and Strict (evidence-based)
 
-### Option 1: Copy to your project
-
-Copy the ralph files into your project:
-
-```bash
-# From your project root
-mkdir -p scripts/ralph
-cp /path/to/ralph/ralph.sh scripts/ralph/
-cp /path/to/ralph/prompt.md scripts/ralph/
-chmod +x scripts/ralph/ralph.sh
-```
-
-### Option 2: Install skills globally
-
-Copy the skills to your Amp config for use across all projects:
+## Quick Start
 
 ```bash
-cp -r skills/prd ~/.config/amp/skills/
-cp -r skills/ralph ~/.config/amp/skills/
+# Clone Ralph
+git clone https://github.com/aakarsh-nadella-c4/ralph.git
+
+# Copy to your project
+cp ralph/droid/strict/ralph-smart.sh /path/to/your/project/
+cp ralph/droid/strict/prompt.md /path/to/your/project/
+
+# Create prd.json in your project (see QUICKSTART.md)
+
+# Run Ralph
+cd /path/to/your/project
+chmod +x ralph-smart.sh
+./ralph-smart.sh 10
 ```
 
-### Configure Amp auto-handoff (recommended)
+See [QUICKSTART.md](./QUICKSTART.md) for detailed instructions.
 
-Add to `~/.config/amp/settings.json`:
+## Intelligent Model Selection
 
-```json
-{
-  "amp.experimental.autoHandoff": { "context": 90 }
-}
-```
+Ralph automatically selects the most efficient model based on research from SWE-bench, Vellum, Anthropic, and OpenAI:
 
-This enables automatic handoff when context fills up, allowing Ralph to handle large stories that exceed a single context window.
+| Task Type | Model | Cost | Why |
+|-----------|-------|------|-----|
+| Simple (config, rename) | Gemini Flash | 0.2× | 80% of tasks can use smaller models |
+| Code generation | GPT-5.1-Codex | 0.5× | Fast, creative solutions |
+| Refactoring | Claude Sonnet 4.5 | 1.2× | Cleaner, idiomatic code |
+| Complex debugging | Claude Opus 4.5 | 2.0× | Best contextual understanding |
+| Architecture | Claude Opus 4.5 | 2.0× | Handles ambiguity well |
 
-## Workflow
+See [droid/models/MODEL-RESEARCH.md](./droid/models/MODEL-RESEARCH.md) for full research citations.
 
-### 1. Create a PRD
-
-Use the PRD skill to generate a detailed requirements document:
-
-```
-Load the prd skill and create a PRD for [your feature description]
-```
-
-Answer the clarifying questions. The skill saves output to `tasks/prd-[feature-name].md`.
-
-### 2. Convert PRD to Ralph format
-
-Use the Ralph skill to convert the markdown PRD to JSON:
+## How It Works
 
 ```
-Load the ralph skill and convert tasks/prd-[feature-name].md to prd.json
+┌─────────────────────────────────────────────────────────┐
+│  RALPH SMART MODE                                       │
+├─────────────────────────────────────────────────────────┤
+│  FOR each iteration:                                    │
+│    1. Read prd.json → find next incomplete story        │
+│    2. Assess complexity (trivial → critical)            │
+│    3. Detect task type (debug, refactor, new code)      │
+│    4. Select optimal model based on research            │
+│    5. Load patterns from AGENTS.md                      │
+│    6. Load relevant skills from skills-library          │
+│    7. Execute story with selected model                 │
+│    8. Verify acceptance criteria                        │
+│    9. Update prd.json, log to progress.txt              │
+│   10. Repeat until all stories complete                 │
+└─────────────────────────────────────────────────────────┘
 ```
 
-This creates `prd.json` with user stories structured for autonomous execution.
+## Project Structure
 
-### 3. Run Ralph
-
-```bash
-./scripts/ralph/ralph.sh [max_iterations]
+```
+ralph/
+├── PRD.md                  # Product requirements document
+├── QUICKSTART.md           # Step-by-step setup guide
+├── AGENTS.md               # Agent instructions
+│
+├── droid/                  # Factory Droid implementation
+│   ├── normal/            # Trust-based mode
+│   ├── strict/            # Verification mode
+│   │   └── ralph-smart.sh # With intelligent model selection
+│   ├── models/            # Model selection system
+│   │   ├── MODELS.json    # Registry of 11 models
+│   │   └── MODEL-RESEARCH.md  # Research citations
+│   └── .factory/          # Interactive droids
+│
+├── amp/                    # Amp CLI implementation
+│   ├── ralph.sh           # Main loop script
+│   └── prompt.md          # AI instructions
+│
+├── skills-library/         # Shared skills
+│   ├── REGISTRY.json      # Skill triggers
+│   ├── core/              # Always-active skills
+│   ├── testing/           # TDD, verification
+│   ├── debugging/         # Systematic debugging
+│   └── planning/          # Task breakdown
+│
+└── flowchart/              # Interactive visualization
 ```
 
-Default is 10 iterations.
+## Implementations
 
-Ralph will:
-1. Create a feature branch (from PRD `branchName`)
-2. Pick the highest priority story where `passes: false`
-3. Implement that single story
-4. Run quality checks (typecheck, tests)
-5. Commit if checks pass
-6. Update `prd.json` to mark story as `passes: true`
-7. Append learnings to `progress.txt`
-8. Repeat until all stories pass or max iterations reached
+| Mode | Script | Description |
+|------|--------|-------------|
+| **Smart** | `droid/strict/ralph-smart.sh` | Intelligent model selection (recommended) |
+| **Strict** | `droid/strict/droid-ralph.sh` | Verification required |
+| **Normal** | `droid/normal/droid-ralph.sh` | Trust-based, faster |
+| **Amp** | `amp/ralph.sh` | For Amp CLI users |
 
-## Key Files
+## Cost Savings Example
 
-| File | Purpose |
-|------|---------|
-| `ralph.sh` | The bash loop that spawns fresh Amp instances |
-| `prompt.md` | Instructions given to each Amp instance |
-| `prd.json` | User stories with `passes` status (the task list) |
-| `prd.json.example` | Example PRD format for reference |
-| `progress.txt` | Append-only learnings for future iterations |
-| `skills/prd/` | Skill for generating PRDs |
-| `skills/ralph/` | Skill for converting PRDs to JSON |
-| `flowchart/` | Interactive visualization of how Ralph works |
+For a PRD with 10 stories of mixed complexity:
+
+| Approach | Token Cost | Savings |
+|----------|------------|---------|
+| Fixed Opus (2.0×) | 20× baseline | - |
+| Smart Selection | 4-6× baseline | **70-80%** |
 
 ## Flowchart
 
 [![Ralph Flowchart](ralph-flowchart.png)](https://snarktank.github.io/ralph/)
 
-**[View Interactive Flowchart](https://snarktank.github.io/ralph/)** - Click through to see each step with animations.
-
-The `flowchart/` directory contains the source code. To run locally:
-
-```bash
-cd flowchart
-npm install
-npm run dev
-```
-
-## Critical Concepts
-
-### Each Iteration = Fresh Context
-
-Each iteration spawns a **new Amp instance** with clean context. The only memory between iterations is:
-- Git history (commits from previous iterations)
-- `progress.txt` (learnings and context)
-- `prd.json` (which stories are done)
-
-### Small Tasks
-
-Each PRD item should be small enough to complete in one context window. If a task is too big, the LLM runs out of context before finishing and produces poor code.
-
-Right-sized stories:
-- Add a database column and migration
-- Add a UI component to an existing page
-- Update a server action with new logic
-- Add a filter dropdown to a list
-
-Too big (split these):
-- "Build the entire dashboard"
-- "Add authentication"
-- "Refactor the API"
-
-### AGENTS.md Updates Are Critical
-
-After each iteration, Ralph updates the relevant `AGENTS.md` files with learnings. This is key because Amp automatically reads these files, so future iterations (and future human developers) benefit from discovered patterns, gotchas, and conventions.
-
-Examples of what to add to AGENTS.md:
-- Patterns discovered ("this codebase uses X for Y")
-- Gotchas ("do not forget to update Z when changing W")
-- Useful context ("the settings panel is in component X")
-
-### Feedback Loops
-
-Ralph only works if there are feedback loops:
-- Typecheck catches type errors
-- Tests verify behavior
-- CI must stay green (broken code compounds across iterations)
-
-### Browser Verification for UI Stories
-
-Frontend stories must include "Verify in browser using dev-browser skill" in acceptance criteria. Ralph will use the dev-browser skill to navigate to the page, interact with the UI, and confirm changes work.
-
-### Stop Condition
-
-When all stories have `passes: true`, Ralph outputs `<promise>COMPLETE</promise>` and the loop exits.
-
-## Debugging
-
-Check current state:
-
-```bash
-# See which stories are done
-cat prd.json | jq '.userStories[] | {id, title, passes}'
-
-# See learnings from previous iterations
-cat progress.txt
-
-# Check git history
-git log --oneline -10
-```
-
-## Customizing prompt.md
-
-Edit `prompt.md` to customize Ralph's behavior for your project:
-- Add project-specific quality check commands
-- Include codebase conventions
-- Add common gotchas for your stack
-
-## Archiving
-
-Ralph automatically archives previous runs when you start a new feature (different `branchName`). Archives are saved to `archive/YYYY-MM-DD-feature-name/`.
+**[View Interactive Flowchart](https://snarktank.github.io/ralph/)**
 
 ## References
 
 - [Geoffrey Huntley's Ralph article](https://ghuntley.com/ralph/)
+- [Factory Droid documentation](https://docs.factory.ai)
 - [Amp documentation](https://ampcode.com/manual)
+- [SWE-bench Leaderboard](https://swebench.com)
+- [OpenAI GPT-5.1 Prompting Guide](https://cookbook.openai.com/examples/gpt-5/gpt-5-1_prompting_guide)

@@ -1,0 +1,127 @@
+{
+  "version": "1.0.0",
+  "description": "Skills registry for Droid Ralph - AI discovers and loads relevant skills automatically",
+  "sources": [
+    "https://github.com/anthropics/skills",
+    "https://github.com/obra/superpowers"
+  ],
+  "categories": {
+    "core": {
+      "description": "Essential workflow skills",
+      "skills": ["skill-selector", "pattern-learning"]
+    },
+    "testing": {
+      "description": "Test-driven development and verification",
+      "skills": ["test-driven-development", "verification-before-completion"]
+    },
+    "debugging": {
+      "description": "Systematic debugging and root cause analysis",
+      "skills": ["systematic-debugging"]
+    },
+    "planning": {
+      "description": "Planning and task breakdown",
+      "skills": ["writing-plans", "executing-plans"]
+    },
+    "documents": {
+      "description": "Document generation and manipulation",
+      "skills": ["pdf", "docx", "xlsx", "pptx"]
+    },
+    "frontend": {
+      "description": "Frontend development and design",
+      "skills": ["frontend-design", "webapp-testing"]
+    }
+  },
+  "skills": {
+    "skill-selector": {
+      "name": "Skill Selector",
+      "category": "core",
+      "path": "core/skill-selector.md",
+      "triggers": ["always"],
+      "description": "Automatically selects relevant skills based on task context"
+    },
+    "pattern-learning": {
+      "name": "Pattern Learning",
+      "category": "core",
+      "path": "core/pattern-learning.md",
+      "triggers": ["always"],
+      "description": "Learn and apply patterns from AGENTS.md"
+    },
+    "test-driven-development": {
+      "name": "Test-Driven Development",
+      "category": "testing",
+      "path": "testing/tdd.md",
+      "triggers": ["test", "testing", "spec", "unit test", "integration test", "TDD"],
+      "description": "Enforce RED-GREEN-REFACTOR cycle for quality code"
+    },
+    "verification-before-completion": {
+      "name": "Verification Before Completion",
+      "category": "testing",
+      "path": "testing/verification.md",
+      "triggers": ["verify", "check", "ensure", "confirm", "validate"],
+      "description": "Ensure changes actually work before marking complete"
+    },
+    "systematic-debugging": {
+      "name": "Systematic Debugging",
+      "category": "debugging",
+      "path": "debugging/systematic.md",
+      "triggers": ["bug", "debug", "fix", "error", "issue", "broken", "not working", "fails"],
+      "description": "4-phase root cause analysis process"
+    },
+    "writing-plans": {
+      "name": "Writing Plans",
+      "category": "planning",
+      "path": "planning/writing-plans.md",
+      "triggers": ["plan", "design", "architect", "break down", "decompose"],
+      "description": "Break work into bite-sized, verifiable tasks"
+    },
+    "executing-plans": {
+      "name": "Executing Plans",
+      "category": "planning",
+      "path": "planning/executing-plans.md",
+      "triggers": ["execute", "implement", "build", "create"],
+      "description": "Execute plans with checkpoints and verification"
+    },
+    "pdf": {
+      "name": "PDF Generation",
+      "category": "documents",
+      "path": "documents/pdf.md",
+      "triggers": ["pdf", "PDF", "document", "report"],
+      "description": "Generate PDF documents programmatically"
+    },
+    "docx": {
+      "name": "Word Document Generation",
+      "category": "documents",
+      "path": "documents/docx.md",
+      "triggers": ["docx", "word", "document", ".docx"],
+      "description": "Generate Word documents programmatically"
+    },
+    "xlsx": {
+      "name": "Excel Generation",
+      "category": "documents",
+      "path": "documents/xlsx.md",
+      "triggers": ["xlsx", "excel", "spreadsheet", ".xlsx"],
+      "description": "Generate Excel spreadsheets programmatically"
+    },
+    "pptx": {
+      "name": "PowerPoint Generation",
+      "category": "documents",
+      "path": "documents/pptx.md",
+      "triggers": ["pptx", "powerpoint", "presentation", "slides", ".pptx"],
+      "description": "Generate PowerPoint presentations programmatically"
+    },
+    "frontend-design": {
+      "name": "Frontend Design",
+      "category": "frontend",
+      "path": "frontend/design.md",
+      "triggers": ["UI", "frontend", "design", "component", "CSS", "React", "Vue", "styling"],
+      "description": "Design and implement frontend components"
+    },
+    "webapp-testing": {
+      "name": "Web App Testing",
+      "category": "frontend",
+      "path": "frontend/webapp-testing.md",
+      "triggers": ["e2e", "end-to-end", "playwright", "cypress", "browser test", "selenium"],
+      "description": "End-to-end testing for web applications"
+    }
+  }
+}
