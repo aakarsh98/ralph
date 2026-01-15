@@ -1,0 +1,24 @@
+{
+  "name": "@ralph/gui-test",
+  "version": "1.0.0",
+  "description": "GUI and Browser testing for Ralph automation system using UI-TARS",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "node dist/test-runner.js",
+    "verify": "node dist/verify.js",
+    "agent-tars": "agent-tars"
+  },
+  "dependencies": {
+    "@ui-tars/sdk": "^1.2.0",
+    "@agent-tars/cli": "^0.3.0",
+    "@agent-tars/core": "^0.3.0",
+    "puppeteer": "^24.0.0",
+    "tree-kill": "^1.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0"
+  }
+}

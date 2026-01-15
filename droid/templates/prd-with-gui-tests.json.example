@@ -1,0 +1,180 @@
+{
+  "project": "MyTaskApp",
+  "branchName": "ralph/task-priority-ui",
+  "description": "Task Priority System with full GUI testing",
+  "qualityChecks": {
+    "typecheck": "npm run typecheck",
+    "lint": "npm run lint",
+    "test": "npm test",
+    "guiTest": "bash ../tools/gui-test/gui-test.sh ./prd.json"
+  },
+  "guiTestConfig": {
+    "devCommand": "npm run dev",
+    "devUrl": "http://localhost:3000",
+    "devPort": 3000,
+    "startupWaitMs": 5000
+  },
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Add priority field to database",
+      "description": "As a developer, I need to store task priority so it persists across sessions.",
+      "acceptanceCriteria": [
+        "Add priority column to tasks table: 'high' | 'medium' | 'low' (default 'medium')",
+        "Generate and run migration successfully",
+        "Typecheck passes"
+      ],
+      "priority": 1,
+      "passes": false,
+      "notes": "Backend only - no GUI tests needed"
+    },
+    {
+      "id": "US-002",
+      "title": "Display priority indicator on task cards",
+      "description": "As a user, I want to see task priority at a glance.",
+      "acceptanceCriteria": [
+        "Each task card shows colored priority badge (red=high, yellow=medium, gray=low)",
+        "Priority visible without hovering or clicking",
+        "Typecheck passes"
+      ],
+      "priority": 2,
+      "passes": false,
+      "notes": "",
+      "browserTests": [
+        {
+          "id": "BT-002-1",
+          "name": "Priority badges are visible",
+          "url": "http://localhost:3000",
+          "actions": [
+            { "type": "wait", "delay": 2000 },
+            { "type": "screenshot", "filename": "task-list.png" }
+          ],
+          "assertions": [
+            { "type": "exists", "selector": "[data-testid='priority-badge']" },
+            { "type": "visible", "selector": "[data-testid='priority-badge']" }
+          ]
+        }
+      ],
+      "guiTests": [
+        {
+          "id": "GT-002-1",
+          "instruction": "Look at the task list page and verify that each task card has a colored priority indicator badge",
+          "expected": "Task cards should display colored badges: red for high priority, yellow for medium, gray for low",
+          "screenshotAfter": true
+        }
+      ]
+    },
+    {
+      "id": "US-003",
+      "title": "Add priority selector to task edit",
+      "description": "As a user, I want to change a task's priority when editing it.",
+      "acceptanceCriteria": [
+        "Priority dropdown in task edit modal",
+        "Shows current priority as selected",
+        "Saves immediately on selection change",
+        "Typecheck passes"
+      ],
+      "priority": 3,
+      "passes": false,
+      "notes": "",
+      "browserTests": [
+        {
+          "id": "BT-003-1",
+          "name": "Priority dropdown in edit modal",
+          "url": "http://localhost:3000",
+          "actions": [
+            { "type": "wait", "delay": 1000 },
+            { "type": "click", "selector": "[data-testid='task-card']:first-child" },
+            { "type": "wait", "delay": 500 },
+            { "type": "click", "selector": "[data-testid='edit-task-btn']" },
+            { "type": "wait", "delay": 500 },
+            { "type": "screenshot", "filename": "edit-modal.png" }
+          ],
+          "assertions": [
+            { "type": "exists", "selector": "[data-testid='priority-select']" },
+            { "type": "visible", "selector": "[data-testid='priority-select']" }
+          ]
+        },
+        {
+          "id": "BT-003-2",
+          "name": "Change priority and save",
+          "url": "http://localhost:3000",
+          "actions": [
+            { "type": "click", "selector": "[data-testid='task-card']:first-child" },
+            { "type": "wait", "delay": 300 },
+            { "type": "click", "selector": "[data-testid='edit-task-btn']" },
+            { "type": "wait", "delay": 300 },
+            { "type": "click", "selector": "[data-testid='priority-select']" },
+            { "type": "click", "selector": "[data-testid='priority-option-high']" },
+            { "type": "wait", "delay": 1000 },
+            { "type": "screenshot", "filename": "priority-changed.png" }
+          ],
+          "assertions": [
+            { "type": "attribute", "selector": "[data-testid='priority-select']", "attribute": "value", "expected": "high" }
+          ]
+        }
+      ],
+      "guiTests": [
+        {
+          "id": "GT-003-1",
+          "instruction": "Open the task edit modal by clicking on a task and then the edit button. Verify there is a priority dropdown selector.",
+          "expected": "A dropdown/select element should be visible with options for High, Medium, and Low priority",
+          "screenshotAfter": true
+        }
+      ]
+    },
+    {
+      "id": "US-004",
+      "title": "Filter tasks by priority",
+      "description": "As a user, I want to filter the task list to see only high-priority items.",
+      "acceptanceCriteria": [
+        "Filter dropdown with options: All | High | Medium | Low",
+        "Filter persists in URL params",
+        "Empty state message when no tasks match filter",
+        "Typecheck passes"
+      ],
+      "priority": 4,
+      "passes": false,
+      "notes": "",
+      "browserTests": [
+        {
+          "id": "BT-004-1",
+          "name": "Priority filter dropdown exists",
+          "url": "http://localhost:3000",
+          "actions": [
+            { "type": "wait", "delay": 1000 },
+            { "type": "screenshot", "filename": "filter-dropdown.png" }
+          ],
+          "assertions": [
+            { "type": "exists", "selector": "[data-testid='priority-filter']" }
+          ]
+        },
+        {
+          "id": "BT-004-2",
+          "name": "Filter by high priority updates URL",
+          "url": "http://localhost:3000",
+          "actions": [
+            { "type": "click", "selector": "[data-testid='priority-filter']" },
+            { "type": "click", "selector": "[data-testid='filter-option-high']" },
+            { "type": "wait", "delay": 500 }
+          ],
+          "assertions": []
+        }
+      ],
+      "guiTests": [
+        {
+          "id": "GT-004-1",
+          "instruction": "Look at the task list page and verify there is a filter dropdown that allows filtering by priority",
+          "expected": "A filter dropdown should be visible with options: All, High, Medium, Low",
+          "screenshotAfter": true
+        },
+        {
+          "id": "GT-004-2",
+          "instruction": "Click the priority filter and select 'High'. Verify the list updates to show only high priority tasks",
+          "expected": "Only tasks with red/high priority badges should be visible after filtering",
+          "screenshotAfter": true
+        }
+      ]
+    }
+  ]
+}
